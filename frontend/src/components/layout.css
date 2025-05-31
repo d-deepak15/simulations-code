@@ -1,0 +1,58 @@
+.app-container {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  height: 100vh;
+}
+
+.logo-section {
+  padding: 10px;
+  background: #f5f6fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.toolbar-section {
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left-tools button {
+  margin-right: 8px;
+  padding: 6px 12px;
+}
+
+.right-tools {
+  display: flex;
+  gap: 12px;
+}
+
+.code-btn.active {
+  background: #e3f2fd;
+}
+
+.component-panel-wrapper {
+  position: fixed;
+  right: 0;
+  top: 120px;
+  bottom: 0;
+  background: white;
+  box-shadow: -2px 0 12px rgba(0,0,0,0.1);
+}
+
+.panel-toggle-btn {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  padding: 20px 8px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  cursor: pointer;
+}
