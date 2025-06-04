@@ -21,7 +21,6 @@ export default function App() {
   const [code, setCode] = useState(sampleCode);
   const [componentPanelOpen, setComponentPanelOpen] = useState(true);
 
-  // For positioning the code box below the code button
   const codeBtnRef = useRef(null);
   const [codeBoxPos, setCodeBoxPos] = useState({ top: 0, left: 0 });
 
@@ -29,14 +28,19 @@ export default function App() {
     if (codeOpen && codeBtnRef.current) {
       const rect = codeBtnRef.current.getBoundingClientRect();
       setCodeBoxPos({
-        top: rect.bottom + window.scrollY + 8, // 8px below the button
-        left: rect.left + window.scrollX - 120  // shift left so it aligns under the button
+        top: rect.bottom + window.scrollY + 8,
+        left: rect.left + window.scrollX - 120
       });
     }
   }, [codeOpen]);
 
   const logoRowHeight = 44;
   const toolbarRowHeight = 48;
+
+  // Handler passed to ComponentPanel
+  const handleDragStart = (e, name) => {
+    e.dataTransfer.setData("text/plain", name);
+  };
 
   return (
     <div style={{ height: "100vh", width: "100vw", background: "#fff", display: "flex", flexDirection: "column" }}>
@@ -52,7 +56,7 @@ export default function App() {
         <LogoBox />
       </div>
 
-      {/* Toolbar + Code/Simulation Row */}
+      {/* Toolbar Row */}
       <div style={{
         height: toolbarRowHeight,
         display: "flex",
@@ -61,12 +65,10 @@ export default function App() {
         background: "#fff",
         position: "relative"
       }}>
-        {/* Toolbar left-aligned */}
         <div style={{ display: "flex", alignItems: "center" }}>
           <Toolbar />
         </div>
         <div style={{ flex: 1 }} />
-        {/* Code/Simulation buttons right-aligned */}
         <div style={{
           display: "flex",
           alignItems: "center",
@@ -82,12 +84,11 @@ export default function App() {
           </button>
           <button style={simBtn}>Start Simulation</button>
         </div>
-        {/* Code Box (portrait, below code button) */}
         {codeOpen && (
           <div
             style={{
               position: "absolute",
-              top: toolbarRowHeight + 8, // 8px below the toolbar row
+              top: toolbarRowHeight + 8,
               left: codeBoxPos.left - document.body.getBoundingClientRect().left,
               width: 320,
               height: 400,
@@ -122,7 +123,7 @@ export default function App() {
         )}
       </div>
 
-      {/* Main Area: Design + Components */}
+      {/* Main Content */}
       <div style={{ flex: 1, display: "flex", position: "relative", minHeight: 0 }}>
         {/* Design Area */}
         <div
@@ -140,18 +141,19 @@ export default function App() {
         >
           <DesignArea />
         </div>
-        {/* Right Component Panel */}
+
+        {/* Component Panel */}
         <div style={{
           width: componentPanelOpen ? 300 : 0,
           transition: "width 0.3s",
           background: "#f6f8fb",
           borderLeft: componentPanelOpen ? "2px solid #bfc7d0" : "none",
-          position: "relative",
           overflow: "hidden"
         }}>
-          {componentPanelOpen && <ComponentPanel />}
+          {componentPanelOpen && <ComponentPanel onDragStart={handleDragStart} />}
         </div>
-        {/* Expand/Collapse Arrow (always vertically centered) */}
+
+        {/* Expand/Collapse Panel Button */}
         <button
           onClick={() => setComponentPanelOpen(open => !open)}
           style={{
@@ -188,6 +190,7 @@ const codeBtn = {
   fontSize: 15,
   cursor: "pointer"
 };
+
 const simBtn = {
   height: 32,
   padding: "0 14px",

@@ -1,81 +1,83 @@
-// ComponentPanel.jsx
-import resistorSVG from '../assets/resistor.svg'; // 👈 Import your local SVG
+import React from "react";
+import resistorSVG from '../assets/resistor.svg';
 import ledSVG from '../assets/led.svg';
 import arduinoSVG from '../assets/arduino.svg';
 import bbFullSVG from '../assets/bbfull.svg';
 import pushbuttonSVG from '../assets/pushbutton.svg';
 import LCDI2CSVG from '../assets/lcd.svg';
+
 const components = [
   { name: "Arduino uno", img: arduinoSVG },
   { name: "LED", img: ledSVG },
-  { name: "Resistor", img: resistorSVG }, // 👈 Use imported SVG here
+  { name: "Resistor", img: resistorSVG },
   { name: "Pushbutton", img: pushbuttonSVG },
   { name: "Breadboard Full", img: bbFullSVG },
   { name: "LCD I2C", img: LCDI2CSVG },
 ];
 
 export default function ComponentPanel() {
+  const handleDragStart = (e, component) => {
+    e.dataTransfer.setData("component", JSON.stringify(component));
+  };
+
   return (
-    <div style={{ padding: 16, height: "100%", display: "flex", flexDirection: "column" }}>
-      {/* Components Header Box */}
+    <div style={{
+      padding: 16,
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      background: "#f8f9fa",
+      borderLeft: "1px solid #dee2e6"
+    }}>
       <div style={{
-        background: "#e3f1fb",
-        border: "1.5px solid #bfc7d0",
-        borderRadius: 6,
-        padding: "8px 12px",
-        marginBottom: 16,
-        textAlign: "center",
-        fontWeight: "bold",
+        padding: "12px 16px",
+        background: "#e9ecef",
+        borderBottom: "1px solid #ced4da",
         fontSize: 16,
-        color: "#333"
+        fontWeight: 500,
+        color: "#212529"
       }}>
         Components
       </div>
-
-      {/* Search Bar */}
       <div style={{
-        display: "flex", 
-        alignItems: "center", 
-        marginBottom: 16, 
-        background: "#e3f1fb", 
-        borderRadius: 6, 
-        padding: "6px 10px",
-        border: "1px solid #bfc7d0"
-      }}>
-        <input
-          type="text"
-          placeholder="search"
-          style={{
-            flex: 1, 
-            border: "none", 
-            background: "transparent", 
-            fontSize: 15, 
-            outline: "none"
-          }}
-        />
-        <span style={{ marginLeft: 8, fontSize: 18 }}>🔍</span>
-      </div>
-
-      {/* Components Grid */}
-      <div style={{
-        display: "grid", 
-        gridTemplateColumns: "1fr 1fr", 
-        gap: 12,
         flex: 1,
+        padding: 16,
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
+        gap: 16,
         overflowY: "auto"
       }}>
-        {components.map((c, i) => (
-          <div key={i} style={{
-            background: "#fff", 
-            border: "1.5px solid #bfc7d0", 
-            borderRadius: 8,
-            display: "flex", 
-            flexDirection: "column", 
-            alignItems: "center", 
-            padding: 10
-          }}>
-            <img src={c.img} alt={c.name} style={{ width: 48, height: 48, marginBottom: 6 }} />
-            <span style={{ fontSize: 13, color: "#333", textAlign: "center" }}>{c.name}</span>
+        {components.map((component, index) => (
+          <div
+            key={index}
+            draggable
+            onDragStart={(e) => handleDragStart(e, component)}
+            style={{
+              padding: 12,
+              background: "#fff",
+              borderRadius: 8,
+              border: "1px solid #dee2e6",
+              cursor: "grab"
+            }}
+          >
+            <img
+              src={component.img}
+              alt={component.name}
+              style={{
+                width: "100%",
+                height: 60,
+                marginBottom: 8,
+                pointerEvents: "none"
+              }}
+            />
+            <div style={{
+              textAlign: "center",
+              fontSize: 13,
+              color: "#495057",
+              fontWeight: 500
+            }}>
+              {component.name}
+            </div>
           </div>
         ))}
       </div>
